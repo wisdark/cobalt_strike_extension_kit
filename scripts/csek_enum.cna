@@ -373,6 +373,13 @@ item "Display All Available Shares Based On Domain Controller & Domain - T1135"{
 } #End Snaffler Menu
 
 
+item "Find Shares using SharpShares"{
+	local('$bid');
+		foreach $bid ($1){
+			sharpshares($bid);
+			}
+		}
+
 
 #Find Cloud Credential Files
 item "Find Cloud Creds"{
@@ -940,6 +947,10 @@ bexecute_assembly($bids, script_resource("/exe/Snaffler.exe"), "-s -u -j 75 -c $
 #Snaffler.exe -s -u -j 75 -c "$DOMAINCONTROLLER" -d "$DOMAIN" -v data Specify which domain controller (OPSEC) and Domain - try not to hit Azure or ATP DC's - PDC is preferred (Added user switch)
 
 
+#SharpShares
+sub sharpshares{
+bexecute_assembly($1, script_resource('/exe/SharpShares.exe'), "shares");
+}
 
 # Cloud Creds
 sub cloudcreds{

