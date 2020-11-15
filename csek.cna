@@ -29,6 +29,16 @@ foreach $file (@aggressor){
 #   Define Main Menu
 
 #################################################
+popup beacon_top {
+
+menu "Quick Enum" {
+
+include('/opt/cobalt_strike_extension_kit/scripts/quickenum.cna')
+
+} #End Menu
+
+} #End PopUp Beacon Top
+
 
 popup beacon_top {
 
