@@ -31,7 +31,7 @@ foreach $file (@aggressor){
 #################################################
 popup beacon_top {
 
-item "Quick Enum" {
+menu "Quick Enum" {
 
 include('/opt/cobalt_strike_extension_kit/scripts/quickenum.cna')
 
