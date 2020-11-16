@@ -1,3 +1,12 @@
+item "Run SET Command"{
+
+    local('$bid');
+        foreach $bid ($1){
+            runsetcommand($bid);
+      }
+   }  #End Item 
+
+
 item "List Forest Attributes"{
 
     local('$bid');
@@ -93,6 +102,9 @@ item "Show Managed Objects"{
                 }, $bids => $1));
 			}
 
+sub runsetcommand{
+bexecute_assembly($1, script_resource('/exe/ldaputility.exe'), "set");
+}
 
 sub listspn{
 bexecute_assembly($1, script_resource('/exe/StandIn.exe'), "--spn");
