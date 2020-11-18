@@ -387,7 +387,7 @@ sub querylogoneventsforuser{
 #Function to query remote AV
 sub remoteantivirusoncomputerwithcurrentpassword{
 prompt_text("Enter Computer Name", "", lambda({
-bexecute_assembly($bids, script_resource("/exe/WMIUtility.exe"), "Get-AV");
+bexecute_assembly($bids, script_resource("/exe/WMIUtility.exe"), "Get-AV $1");
 }, $bids => $1));
 }
 
