@@ -550,6 +550,17 @@ item "Find Interesting Domain Shares  - T1135"{
 		}
 	}
 
+#############################
+#SharpDir - Search For Files
+#############################
+item "SharpDir - Search For Files"{
+
+    local('$bid');
+        foreach $bid ($1){
+            sharpdircustom($bid);
+      }
+   }
+
 #Find File Servers 
 item "Find File Servers  - T1083"{
 	local('$bid');
@@ -1147,6 +1158,25 @@ bexecute_assembly($1, script_resource('/exe/SharpCloud.exe'), "all");
 # SharpView Find Interesting Domain Shares
 sub findinterestingdomainsharefile{
 bexecute_assembly($1, script_resource('/exe/SharpView.exe'), "Find-InterestingDomainShareFile");
+}
+
+#############################
+#SharpDir - Search For Files
+#############################
+sub sharpdircustom{
+    $bid = $1;
+    $dialog = dialog("Show Domain and DC Shares", %(path => "", file => "", execmethod => "Execute-Assembly"), lambda({
+       $cmdargs = "";
+		$cmdargs = "$3['path'] $3['file']";
+        if ($3["execmethod"] eq "Execute-Assembly"){         
+            bexecute_assembly($bid, script_resource('/exe/SharDir.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Search For Files Using SharpDir");
+    drow_text($dialog, "path",  "Please Enter A Path: ");
+    drow_text($dialog, "file",  "Please Enter A FileName/Wildcard: ");
+    dbutton_action($dialog, "Run");
+	dialog_show($dialog);
 }
 
 # SharpView Find File Servers
