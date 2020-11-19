@@ -278,7 +278,7 @@ menu "Phishing Users"{
 
 #Run pickl3
 
-		item "Prompt for Username and Password  - T1141"{
+		item "Prompt for Username and Password (Better OpSec) - T1141"{
 			local('$bid');
 				foreach $bid ($1){
 					pickl3($bid);
