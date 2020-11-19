@@ -87,6 +87,46 @@ item "List Domain SID (Specify Domain) (SharpView)"{
 			getdomainsidspec($bid);
 			}
 		}
+		
+		
+#################################################
+
+#   Domain/Forest Enumeration
+
+#################################################
+
+
+#Get Net Forest
+		item "List Domains of Forest  - T1"{
+			local('$bid');
+				foreach $bid ($1){
+					getnetforest($bid);
+					}
+				}
+				
+#Get Net Forest Domain
+		item "Enumerate All Domains for The Current Forest  - T1482"{
+			local('$bid');
+				foreach $bid ($1){
+					getnetforestdomain($bid);
+					}
+				}		
+				
+#Get Net Domain Trust
+		item "Enumerate Domain Trust relationships  - T1482"{
+			local('$bid');
+				foreach $bid ($1){
+					getnetdomaintrust($bid);
+					}
+				}				
+				
+#Get Net Forest Trust
+		item "Enumerate Forest Trusts Of Current Domain  - T1482"{
+			local('$bid');
+				foreach $bid ($1){
+					getnetforesttrust($bid);
+					}
+				}
 
 #################################################
 
@@ -192,46 +232,7 @@ item "Find User Location by Username  - T1033"{
 				}
 			}
 
-	
 
-#################################################
-
-#   Domain/Forest Enumeration
-
-#################################################
-
-
-#Get Net Forest
-		item "List Domains of Forest  - T1"{
-			local('$bid');
-				foreach $bid ($1){
-					getnetforest($bid);
-					}
-				}
-				
-#Get Net Forest Domain
-		item "Enumerate All Domains for The Current Forest  - T1482"{
-			local('$bid');
-				foreach $bid ($1){
-					getnetforestdomain($bid);
-					}
-				}		
-				
-#Get Net Domain Trust
-		item "Enumerate Domain Trust relationships  - T1482"{
-			local('$bid');
-				foreach $bid ($1){
-					getnetdomaintrust($bid);
-					}
-				}				
-				
-#Get Net Forest Trust
-		item "Enumerate Forest Trusts Of Current Domain  - T1482"{
-			local('$bid');
-				foreach $bid ($1){
-					getnetforesttrust($bid);
-					}
-				}
         } #End of SharpView Menu
 	
 menu "ADSearch" {
