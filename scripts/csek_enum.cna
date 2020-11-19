@@ -155,16 +155,7 @@ item "Find User Location by Username  - T1033"{
 				foreach $bid ($1){
 					getnetcomputerdom($bid);
 				}
-			}
-
-#List computers in Domain by specifying Operating System
-					
-		item "List Computers with Specific Operating System  - T1018"{
-			local('$bid');
-				foreach $bid ($1){
-					getnetcomputeros($bid);
-				}
-			}			
+			}		
 
 #################################################
 
@@ -192,22 +183,7 @@ item "Find User Location by Username  - T1033"{
 				foreach $bid ($1){
 					getnetgroupdomainadmin($bid);
 				}
-			}
-			
-		item "Schema Admin"{
-			local('$bid');
-				foreach $bid ($1){
-					getnetgroupschemaadmin($bid);
-				}
-			}
-		
-		item "Account Operator"{
-			local('$bid');
-				foreach $bid ($1){
-					getnetgroupaccountoperator($bid);
-				}
-			}
-					
+			}					
 			
 		item "Administrator"{
 			local('$bid');
@@ -256,9 +232,14 @@ item "Find User Location by Username  - T1033"{
 					getnetforesttrust($bid);
 					}
 				}
-        }
+        } #End of SharpView Menu
+	
+menu "ADSearch" {
+
+
+} #End of ADSearch Menu
     
-    }
+    } #End of AD Menu
 
 
 
@@ -978,12 +959,7 @@ bexecute_assembly($bids, script_resource('/exe/SharpView.exe'), "Get-NetComputer
 }, $bids => $1));
 }
 
-# Sharpview Get Net Computer by OS
-sub getnetcomputeros{
-prompt_text("Specifiy an Operating System", "", lambda({
-bexecute_assembly($bids, script_resource('/exe/SharpView.exe'), "Get-NetComputer -OperatingSystem $1");
-}, $bids => $1));
-}
+
 #################################################
 
 #   Domain Group Enumeration
@@ -1003,16 +979,6 @@ bexecute_assembly($1, script_resource('/exe/SharpView.exe'), 'Get-NetGroup -Iden
 # SharpView list Domain Admins
 sub getnetgroupdomainadmin{
 bexecute_assembly($1, script_resource('/exe/SharpView.exe'), 'Get-NetGroup -Identity "Domain Admins" -Recursive');
-}
-
-# SharpView list Schema Admins
-sub getnetgroupschemaadmin{
-bexecute_assembly($1, script_resource('/exe/SharpView.exe'), 'Get-NetGroup -Identity "Schema Admins" -Recursive');
-}
-
-# SharpView list account operators
-sub getnetgroupaccountoperator{
-bexecute_assembly($1, script_resource('/exe/SharpView.exe'), 'Get-NetGroup -Identity "Account Operators" -Recursive');
 }
 
 # SharpView list Administrators group
