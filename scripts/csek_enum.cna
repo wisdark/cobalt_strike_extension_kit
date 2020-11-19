@@ -717,6 +717,19 @@ item "Outlook Email Keyword Search"{
 
 #################################################
 
+#   Registry Strikes Back
+
+#################################################
+
+item "Registry Strikes Back (Export .reg files from registry)"{
+	local('$bid');
+		foreach $bid ($1){
+			regsb($bid);
+		}
+	}
+
+#################################################
+
 #   EDR Query
 
 #################################################
@@ -1350,7 +1363,30 @@ prompt_text("Enter Keyword:", "", lambda({
 bexecute_assembly($bids, script_resource("/exe/SearchOutlook.exe"), "$1");
 }, $bids => $1));
 }
-	
+
+#################################################
+
+#   Registry Strikes Back
+
+#################################################
+
+sub regsb{
+    $bid = $1;
+    $dialog = dialog("Show Domain and DC Shares", %(key => "", path => "", execmethod => "Execute-Assembly"), lambda({
+       $cmdargs = "";
+		$cmdargs = "$3['key'] $3['path']";
+        if ($3["execmethod"] eq "Execute-Assembly"){         
+            bexecute_assembly($bid, script_resource('/exe/RegistryStrikesBack.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Export Registry Keys");
+    drow_text($dialog, "key",  "Please Enter A Registry Key: ");
+    drow_text($dialog, "path",  "Please Enter A File Output Path: ");
+    dbutton_action($dialog, "Run");
+	dialog_show($dialog);
+}
+
+		
 #################################################
 
 #   EDR Query
