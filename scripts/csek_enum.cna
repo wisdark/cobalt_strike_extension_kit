@@ -238,6 +238,60 @@ item "Find User Location by Username  - T1033"{
 menu "ADSearch" {
 
 
+item "List Groups"{
+
+    local('$bid');
+        foreach $bid ($1){
+            adsearchlistgroups($bid);
+      }
+   }  #End Item 
+   
+item "List Users"{
+
+    local('$bid');
+        foreach $bid ($1){
+            adsearchlistusers($bid);
+      }
+   }  #End Item 
+   
+   
+item "List SPNs"{
+
+    local('$bid');
+        foreach $bid ($1){
+            adsearchlistspns($bid);
+      }
+   }  #End Item 
+   
+   
+item "List Domain Admins"{
+
+    local('$bid');
+        foreach $bid ($1){
+            adsearchlistdomainadmins($bid);
+      }
+    }  #End Item 
+  } #End Menu  
+} #End Popup Beacon Top
+
+
+sub adsearchlistgroups{
+bexecute_assembly($1, script_resource('/exe/ADSearch.exe'), "--groups");
+}
+
+sub adsearchlistusers{
+bexecute_assembly($1, script_resource('/exe/ADSearch.exe'), "--users");
+}
+
+sub adsearchlistspns{
+bexecute_assembly($1, script_resource('/exe/ADSearch.exe'), "--spns");
+}
+
+sub adsearchlistdomainadmins{
+bexecute_assembly($1, script_resource('/exe/ADSearch.exe'), "--domain-admins");
+}
+ 
+
 } #End of ADSearch Menu
     
     } #End of AD Menu
