@@ -271,9 +271,6 @@ item "List Domain Admins"{
             adsearchlistdomainadmins($bid);
       }
     }  #End Item 
-  } #End Menu  
-} #End Popup Beacon Top
-
 
 sub adsearchlistgroups{
 bexecute_assembly($1, script_resource('/exe/ADSearch.exe'), "--groups");
