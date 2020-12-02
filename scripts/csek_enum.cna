@@ -1372,7 +1372,7 @@ bexecute_assembly($bids, script_resource("/exe/SearchOutlook.exe"), "$1");
 
 sub regsb{
     $bid = $1;
-    $dialog = dialog("Show Domain and DC Shares", %(key => "", path => "", execmethod => "Execute-Assembly"), lambda({
+    $dialog = dialog("Registry Strikes Back", %(key => "", path => "", execmethod => "Execute-Assembly"), lambda({
        $cmdargs = "";
 		$cmdargs = "$3['key'] $3['path']";
         if ($3["execmethod"] eq "Execute-Assembly"){         
