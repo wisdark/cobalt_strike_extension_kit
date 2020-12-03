@@ -9,7 +9,6 @@
 #   Initial Checks
 
 #################################################
-menu "Initial Checks"{
 
 #EDR Checker https://github.com/PwnDexter/SharpEDRChecker
 item "Sharp EDR Checker"{
@@ -20,6 +19,8 @@ item "Sharp EDR Checker"{
       }
 
     } #End of Item
+
+menu "Initial Checks"{
 
 #Seatbelt Menu
 menu "Seatbelt"{
