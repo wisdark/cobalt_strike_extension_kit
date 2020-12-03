@@ -11,6 +11,16 @@
 #################################################
 menu "Initial Checks"{
 
+#EDR Checker https://github.com/PwnDexter/SharpEDRChecker
+item "Sharp EDR Checker"{
+
+    local('$bid');
+        foreach $bid ($1){
+            sharpedrchecker($bid);
+      }
+
+    } #End of Item
+
 #Seatbelt Menu
 menu "Seatbelt"{
 
@@ -717,4 +727,9 @@ sub wnfinject{
 prompt_text("Process ID:", "", lambda({
 bexecute_assembly($bids, script_resource('/exe/WindfarmDynamite.exe '), "-i $1");
 }, $bids => $1));
+}
+
+#EDR Checker function from https://github.com/PwnDexter/SharpEDRChecker
+sub sharpedrchecker{
+bexecute_assembly($1, script_resource('/exe/SharpEDRChecker.exe'));
 }
