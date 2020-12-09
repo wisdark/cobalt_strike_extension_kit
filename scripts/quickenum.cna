@@ -1,3 +1,12 @@
+item "Run AD Collector"{
+
+    local('$bid');
+        foreach $bid ($1){
+            runadcollector($bid);
+      }
+   }  #End Item 
+
+
 item "Run SET Command"{
 
     local('$bid');
@@ -136,4 +145,8 @@ bexecute_assembly($1, script_resource('/exe/TruffleSnout.exe'), "forest -a -n cu
 
 sub listdomainattributes{
 bexecute_assembly($1, script_resource('/exe/TruffleSnout.exe'), "domain --all --name current");
+}
+
+sub runadcollector{
+bexecute_assembly($1, script_resource('/exe/ADCollector.exe'));
 }

