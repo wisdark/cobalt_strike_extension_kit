@@ -41,7 +41,7 @@ item "SMB Code Exec using CSharp"{
 ########################    
 menu "Custom Process Injection" {
 
-item "RemoteProcessInjection"{
+item "RemoteProcessInjection 32bit"{
 
     local('$bid');
         foreach $bid ($1){
@@ -50,32 +50,19 @@ item "RemoteProcessInjection"{
 
     }
     
+item "RemoteProcessInjection 64bit"{
 
-<<<<<<< HEAD
-=======
     local('$bid');
         foreach $bid ($1){
             rpi64($bid);
       }
-      
-  }
+
+    }
  
 
     } #End Menu
  
-    
-item "Urban Bishop Injection by Sk3w" {
 
-    local('$bid');
-        foreach $bid ($1){
-            urbanbishopinjection($bid);
-      }
-      
-  }
-<<<<<<< HEAD
->>>>>>> 15a96f2194f43a49cd02da133d6e234e71507f65
-=======
-  
   item "DCOM Execution with BOF"{
 
     local('$bid');
@@ -84,7 +71,18 @@ item "Urban Bishop Injection by Sk3w" {
       }
 
     }
->>>>>>> 2bbbaa04301ab497e8f74248e45a9eb0ba43c073
+
+item "Urban Bishop Injection by Sk3w" {
+
+    local('$bid');
+        foreach $bid ($1){
+            urbanbishopinjection($bid);
+      }
+      
+  }
+
+  
+
     
     ###################################		         		###################################
 #######################################		         		#######################################
@@ -144,7 +142,6 @@ sub smbexeccsharp{
     dbutton_action($dialog, "Execute");
 	dialog_show($dialog);
 }
-<<<<<<< HEAD
  
 ########################
 ##
@@ -172,13 +169,6 @@ sub rpi86{
 }
 
     
-=======
-
-
-
-
-
-
 
 #################################
 #
@@ -232,9 +222,8 @@ sub urbanbishopinjection{
     dbutton_action($dialog, "Execute");
     dialog_show($dialog);
 }
-<<<<<<< HEAD
->>>>>>> 15a96f2194f43a49cd02da133d6e234e71507f65
-=======
+
+
 
 #########################
 #
@@ -295,4 +284,3 @@ sub OpenDcomDialog{
 		dbutton_action($dialog, "Launch");		
 		dialog_show($dialog);
 }
->>>>>>> 2bbbaa04301ab497e8f74248e45a9eb0ba43c073
